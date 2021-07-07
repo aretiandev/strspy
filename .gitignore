@@ -4,3 +4,6 @@
 .ipynb_checkpoints/
 /testset/
 /test_results/
+
+# Mac files
+.DS_Store
