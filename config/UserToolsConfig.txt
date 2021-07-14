@@ -1,5 +1,5 @@
-SAMTOOLS=/opt/conda/envs/strspy_env/bin/samtools
-BEDTOOLS=/opt/conda/envs/strspy_env/bin/bedtools
-XATLAS=/opt/conda/envs/strspy_env/bin/xatlas
-PARALLEL=/opt/conda/envs/strspy_env/bin/parallel
-MINIMAP=/opt/conda/envs/strspy_env/bin/minimap2
+SAMTOOLS=/home/fer/miniconda3/envs/strspy_env/bin/samtools
+BEDTOOLS=/home/fer/miniconda3/envs/strspy_env/bin/bedtools
+XATLAS=/home/fer/miniconda3/envs/strspy_env/bin/xatlas
+PARALLEL=/home/fer/miniconda3/envs/strspy_env/bin/parallel
+MINIMAP=/home/fer/miniconda3/envs/strspy_env/bin/minimap2
