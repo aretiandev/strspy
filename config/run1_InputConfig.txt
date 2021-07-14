@@ -1,10 +1,10 @@
 #"==========================================Inputs for STRspy==========================================================================="
-INPUT_DIR=bioliquid-data
+INPUT_DIR=data/run1/input
 INPUT_BAM=yes
 READ_TYPE=ont
-STR_FASTA=bioliquid-data/db
-STR_BED=bioliquid-data/db
+STR_FASTA=data/run1/input/db
+STR_BED=data/run1/input/db
 GENOME_FASTA=example/ref_genome/chr22.fa
-REGION_BED=bioliquid-data/regions/all_strs.bed
+REGION_BED=data/run1/input/regions/all_strs.bed
 NORM_CUTOFF=0.4
-OUTPUT_DIR=bioliquid-output
+OUTPUT_DIR=data/run1/output

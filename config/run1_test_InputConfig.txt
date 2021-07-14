@@ -1,0 +1,10 @@
+#"==========================================Inputs for STRspy==========================================================================="
+INPUT_DIR=data/run1_test/input
+INPUT_BAM=yes
+READ_TYPE=ont
+STR_FASTA=data/run1_test/input/db
+STR_BED=data/run1_test/input/db
+GENOME_FASTA=example/ref_genome/chr22.fa
+REGION_BED=data/run1_test/input/regions/all_strs.bed
+NORM_CUTOFF=0.4
+OUTPUT_DIR=data/run1_test/output
