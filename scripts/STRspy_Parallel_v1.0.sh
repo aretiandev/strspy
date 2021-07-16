@@ -302,7 +302,6 @@ fi
 ## step2 : Mapping to STR.fa + conting + normalization + SNV calling
 #"==================================================================="
 motif_bed_size=$(ls $motif_bed_dir | wc -l)
-bedcount=0
 if [[ $read_type == "$type" ]]; then
 # 	echo -e "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 # 	echo -e "#Spying on STR for a given samples...."
@@ -311,6 +310,7 @@ if [[ $read_type == "$type" ]]; then
 		bam_name="${bamfile##*/}"
 		echo ""
 		echo "BAM:" $bam_name
+		bedcount=0
 		for bedfile in "${strbed[@]}"; do
 			bed_name="${bedfile##*/}"
 			bed_fname=$(basename $bed_name .bed)
