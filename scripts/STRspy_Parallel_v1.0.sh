@@ -301,7 +301,7 @@ fi
 #"==================================================================="
 ## step2 : Mapping to STR.fa + conting + normalization + SNV calling
 #"==================================================================="
-motif_bed_size=$(ls $motif_bed_dir | wc -l)
+motif_bed_size=$(ls ${motif_bed_dir}/*.bed | wc -l)
 if [[ $read_type == "$type" ]]; then
 # 	echo -e "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 # 	echo -e "#Spying on STR for a given samples...."
