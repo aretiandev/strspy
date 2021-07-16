@@ -66,7 +66,8 @@ if [[ ! -d "$output_dir" ]]; then
 fi
 
 if [[ "$readtype" == "ont" ]]; then
-	echo -e "Read Type:" "$readtype"
+	:
+# 	echo -e "Read Type:" "$readtype"
 elif [[ "$readtype" == "pb" ]]; then
 	echo -e "Read Type:" "$readtype"
 else
@@ -102,23 +103,23 @@ elif [[ "$is_input_bam" != "yes" ]] && [[ "$is_input_bam" != "no" ]] ; then
 	print_USAGE
 	exit 1;
 else
-	echo -e "========================================================"
-	echo -e "Arguments are fine !! analysis proceeded.."
+# 	echo -e "========================================================"
+# 	echo -e "Arguments are fine !! analysis proceeded.."
 	now="$(date)"
-	echo -e "Analysis date and time:" "$now"
-	echo -e "========================================================"
-	echo "Input read dir:" "$input_reads_dir"
+# 	echo -e "Analysis date and time:" "$now"
+# 	echo -e "========================================================"
+# 	echo "Input read dir:" "$input_reads_dir"
 	if [[ "$is_input_bam" == "yes" ]]; then
 		read_type="bam"
-		echo "Input type: bam"
+# 		echo "Input type: bam"
 	else
 		read_type="fastq"
-		 echo "Input type: fastq"
+# 		 echo "Input type: fastq"
 	fi 
-	echo -e "Motif/STR fasta dir:" "$motif_fasta_dir"
-	echo -e "Motif/STR bed dir:" "$motif_bed_dir"
-	echo -e "region_bed:" "$region_bed"
-	echo -e "Output dir:" "$output_dir"
+# 	echo -e "Motif/STR fasta dir:" "$motif_fasta_dir"
+# 	echo -e "Motif/STR bed dir:" "$motif_bed_dir"
+# 	echo -e "region_bed:" "$region_bed"
+# 	echo -e "Output dir:" "$output_dir"
 fi
 
 
@@ -170,8 +171,8 @@ fi
 if [[ "$is_input_bam" == "yes" ]] && [[ ! -e "$genome_fa" ]]; then
 	## ignore genome fasta in case of bam input reads if user provides nothing
 	genome="NULL"
-	echo -e "genome ref fasta:" "$genome"
-	echo -e "========================================================"
+# 	echo -e "genome ref fasta:" "$genome"
+# 	echo -e "========================================================"
 fi
 
 if [[ "$is_input_bam" == "yes" ]] && [[ -f "$genome_fa" ]]; then
@@ -288,7 +289,7 @@ if [[ "$is_input_bam" == "yes" ]]; then
 	type="bam"
 	mkdir -p $output_dir/GenomicMappingStats
 	if [[ -e "${bam[0]}" ]]; then
-		echo -e "#Summerizing the mapped, unmapped reads and their percentage"
+		echo -e "#Summarizing the mapped, unmapped reads and their percentage"
 		get_cov $input_reads_dir $output_dir/GenomicMappingStats $region_bed
 		echo -e "#Done"
 	else
@@ -300,64 +301,71 @@ fi
 #"==================================================================="
 ## step2 : Mapping to STR.fa + conting + normalization + SNV calling
 #"==================================================================="
+motif_bed_size=$(ls $motif_bed_dir | wc -l)
+bedcount=0
 if [[ $read_type == "$type" ]]; then
-	echo -e "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-	echo -e "#Spying on STR for a given samples...."
+# 	echo -e "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+# 	echo -e "#Spying on STR for a given samples...."
 	## create a inner and outer loop
 	for bamfile in "${bam[@]}"; do
 		bam_name="${bamfile##*/}"
+		echo ""
+		echo "BAM:" $bam_name
 		for bedfile in "${strbed[@]}"; do
 			bed_name="${bedfile##*/}"
 			bed_fname=$(basename $bed_name .bed)
-			echo -e "Working for:" $bam_name $bed_name
+			((bedcount=bedcount+1))
+			percent=$((100*${bedcount}/${motif_bed_size} + 200*${bedcount}/${motif_bed_size} % 2))
+			echo -en "\rProgress: ${percent}%. STR ${bedcount} out of ${motif_bed_size}. BED: ${bed_name}"
+# 			echo -en "\rWorking for:" $bam_name $bed_name "out of " $motif_bed_size "."
 			##Intersect regions from bed vs bam
-			echo -e "#Started Intersecting regions from bed vs bam and creating fastq reads..."
+# 			echo -e "#Started Intersecting regions from bed vs bam and creating fastq reads..."
 			$bedtools intersect -a "${bamfile}" -b "${bedfile}" > $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam
 			## bam to fastq
 			$bedtools bamtofastq -i $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam -fq $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam.fq
 			rm -rf $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam
-			echo -e "#Done.\n"
-			echo -e "#Mapping fastq to motif fasta...\n"
+# 			echo -e "#Done.\n"
+# 			echo -e "#Mapping fastq to motif fasta...\n"
 			if [[ "$readtype" == "ont" ]]; then
-				$minimap --MD -L -ax map-ont $motif_fasta_dir/"$bed_fname".fa $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam.fq -o $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sam
+				$minimap --MD -L -ax map-ont $motif_fasta_dir/"$bed_fname".fa $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam.fq -o $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sam &>/dev/null
 			elif [[ "$readtype" == "pb" ]]; then
 				$minimap --MD -L -ax map-pb $motif_fasta_dir/"$bed_fname".fa $output_dir/IntersectedRegions/"$bam_name"_"$bed_name".bam.fq -o $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sam
 			else
-				echo -e "#Provided Read type is not known"
+# 				echo -e "#Provided Read type is not known"
 				exit 1;
 			fi
-			echo -e "#Done.\n"
-			echo -e "#sam to bam + sort + index..."
+# 			echo -e "#Done.\n"
+# 			echo -e "#sam to bam + sort + index..."
 			$samtools view -S -b $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sam -o $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.bam
 			$samtools sort -o $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sorted.bam $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.bam
 			$samtools index $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sorted.bam
 			rm -rf $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sam $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.bam
 			## SNV calling by xatlas
-			echo -e "#SNV calling by xatlas...\n"
+# 			echo -e "#SNV calling by xatlas...\n"
 			$xatlas \
 			-r $motif_fasta_dir/"$bed_fname".fa \
 			-i $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sorted.bam \
 			-s $output_dir/SNVcalls/"$bed_fname"_"$bam_name" \
-			-p $output_dir/SNVcalls/"$bed_fname"_"$bam_name"
-			echo -e "#Counting Alleles..."
+			-p $output_dir/SNVcalls/"$bed_fname"_"$bam_name" &>/dev/null
+# 			echo -e "#Counting Alleles..."
 			$samtools view -q 1 -F 4 $output_dir/IntersectMappedReads/"$bed_fname"_"$bam_name"_alignment.sorted.bam | cut -f 3 | sort | uniq -c | sed -e 's/^ *//;s/ /\t/' | \
 			grep -v '*' | sort -nr -k1,1 > $output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt
-			echo -e "#Normalize with maximum value of Allele counts.."
+# 			echo -e "#Normalize with maximum value of Allele counts.."
 			awk 'FNR==NR{max=($1+0>max)?$1:max;next} {print $2"\t"$1"\t"$1/max}' $output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt \
 			$output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt > temp && mv temp $output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt 
 			## header
 			sed -i '1iSTR\tRawCounts\tNormalizedCounts' $output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt
 			## get top two by getting top two
-			echo -e "#get top two Alleles by filtering norm value <=" $filter_threshold
+# 			echo -e "#get top two Alleles by filtering norm value <=" $filter_threshold
 			sed '1d' $output_dir/Countings/"$bed_fname"_"$bam_name"_Allele_freqs.txt | awk  -v f="$filter_threshold" '$3>=f' | tr '_' ' ' | sed 's/\]/] /g' | awk '{print $1"\t"$(NF-2)"\t"$NF}' | sort -r -k3,3 | head -n 2 > $output_dir/Countings/"$bed_fname"_"$bam_name"_Toptwo.txt
 			## header
 			sed -i '1iLocus\tAllele\tNormalizedCounts' $output_dir/Countings/"$bed_fname"_"$bam_name"_Toptwo.txt
-			echo -e "#Done.\n"
+# 			echo -e "#Done.\n"
 		done
 	done
 fi
 
-echo -e "All Done.\n"
+echo -e "\nAll Done.\n"
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 echo -e "\n#The log file also has created in your working directory\n"

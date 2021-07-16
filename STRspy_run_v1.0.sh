@@ -33,7 +33,7 @@ set -a
 
 #################################### WE REQUEST YOU TO PLEASE DO NOT TOUCH BELOW THIS LINE ##############################
 
-echo -e "\n"
+# echo -e "\n"
 print_softInfo ()
 {
 echo -e "#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Welcome to STRspy^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#"
@@ -43,7 +43,7 @@ echo -e "#		Author		  	: bioinforupesh2009 DOT au AT gmail DOT com"
 echo -e "#		Copyright (c) 		: 2021 Kesharwani RK"
 echo -e "#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#"
 }
-print_softInfo
+# print_softInfo
 ##input file
 InputConfig="$1"
 ToolsConfig="$2"
@@ -78,10 +78,14 @@ fi
 
 ## Extract parameters from the given file
 #clear
-echo -e "\n"
-echo -e "########################################################"
-echo -e "#################   Input Parameters   #################"
-echo -e "########################################################"
+# echo -e "\n"
+# echo -e "########################################################"
+# echo -e "#################   Input Parameters   #################"
+# echo -e "########################################################"
+
+echo ""
+echo "# Input Parameters"
+echo ""
 
 INPUT_DIR=$(cat $InputConfig | grep -w '^INPUT_DIR' | cut -d '=' -f2)
 INPUT_BAM=$(cat $InputConfig | grep -w '^INPUT_BAM' | cut -d '=' -f2)
@@ -93,7 +97,7 @@ REGION_BED=$(cat $InputConfig | grep -w '^REGION_BED' | cut -d '=' -f2)
 NORM_CUTOFF=$(cat $InputConfig | grep -w '^NORM_CUTOFF' | cut -d '=' -f2)
 OUTPUT_DIR=$(cat $InputConfig | grep -w '^OUTPUT_DIR' | cut -d '=' -f2)
 ## print paramters from a input file
-echo -e "\n"
+# echo -e "\n"
 echo -e "#DIR OF LONG READS INPUT 	:" $INPUT_DIR
 echo -e "#FILE TYPE BAM?			:" $INPUT_BAM
 echo -e "#READ TYPE			:" $READ_TYPE
@@ -105,10 +109,14 @@ echo -e "#NORMALIZATION THRESHOLD 	:" $NORM_CUTOFF
 echo -e "#OUTPUT DIR 			:" $OUTPUT_DIR
 
 
-echo -e "\n"
-echo -e "########################################################"
-echo -e "####################   Tools Path    ###################"
-echo -e "########################################################"
+# echo -e "\n"
+# echo -e "########################################################"
+# echo -e "####################   Tools Path    ###################"
+# echo -e "########################################################"
+
+echo ""
+echo "# Tools Path"
+echo ""
 
 BEDTOOLS=$(cat $ToolsConfig | grep -w '^BEDTOOLS' | cut -d '=' -f2)
 MINIMAP=$(cat $ToolsConfig | grep -w '^MINIMAP' | cut -d '=' -f2)
@@ -116,12 +124,13 @@ SAMTOOLS=$(cat $ToolsConfig | grep -w '^SAMTOOLS' | cut -d '=' -f2)
 XATLAS=$(cat $ToolsConfig | grep -w '^XATLAS' | cut -d '=' -f2)
 PARALLEL=$(cat $ToolsConfig | grep -w '^PARALLEL' | cut -d '=' -f2)
 ## print tools input from a input file
-echo -e "\n"
+# echo -e "\n"
 echo -e "#BEDTOOLS			:" $BEDTOOLS
 echo -e "#MINIMAP			:" $MINIMAP
 echo -e "#SAMTOOLS			:" $SAMTOOLS
 echo -e "#XATLAS				:" $XATLAS
 echo -e "#PARALLEL 			:" $PARALLEL
+echo ""
 
 ########################
 #### Analysis begins ###
@@ -129,10 +138,10 @@ echo -e "#PARALLEL 			:" $PARALLEL
 
 
 if [[ -f "./scripts/STRspy_Parallel_v1.0.sh" ]]; then
-	echo -e "\n"
-	echo -e "\t\t  ~ ~ ~ ~ Running STRspy ~ ~ ~ ~	 "
+# 	echo -e "\n"
+# 	echo -e "\t\t  ~ ~ ~ ~ Running STRspy ~ ~ ~ ~	 "
 	#echo -e "\t\tAnalysis date:" `date`
-	echo -e "\n"
+# 	echo -e "\n"
 	##############################
 	## nested loop version STRspy
 	#bash scripts/STRspy_v1.0.sh "$INPUT_DIR" "$INPUT_BAM" "$READ_TYPE" "$STR_FASTA" "$STR_BED" "$GENOME_FASTA" "$REGION_BED" "$NORM_CUTOFF" "$OUTPUT_DIR" "$ToolsConfig" 
