@@ -1,0 +1,10 @@
+#"==========================================Inputs for STRspy==========================================================================="
+INPUT_DIR=/mnt/aretian/genomics/nanopore/run2/strspy/cf/input
+INPUT_BAM=yes
+READ_TYPE=ont
+STR_FASTA=/mnt/aretian/genomics/nanopore/run2/strspy/cf/input/db
+STR_BED=/mnt/aretian/genomics/nanopore/run2/strspy/cf/input/db
+GENOME_FASTA=example/ref_genome/chr22.fa
+REGION_BED=/mnt/aretian/genomics/nanopore/run2/strspy/cf/input/regions/all_strs.bed
+NORM_CUTOFF=0.4
+OUTPUT_DIR=/mnt/aretian/genomics/nanopore/run2/strspy/cf/output
